@@ -1,0 +1,83 @@
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin: 0;
+    background: linear-gradient(120deg, #d4fc79, #96e6a1);
+    min-height: 100vh;
+    padding: 40px;
+    color: #2c3e50;
+}
+
+.weather {
+    background: #ffffffcc;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+.flex-row {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.weather-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.weather-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1em;
+}
+
+.weather-form button {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 1.0s;
+}
+
+.weather-form button:hover {
+    background: #1a252f;
+}
+
+.weather-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+}
+
+.weather-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.weather-item:last-child {
+    border-bottom: none;
+}
+
+.center-title {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    width: 100%;
+}

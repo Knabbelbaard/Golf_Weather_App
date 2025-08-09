@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Golf Weer App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1 class="center-title">🌤 Golf Weer App</h1>
+    <div class="flex-row">
+        <div class="container">
+                        
+            <form method="post" class="weather-form">
+                <input type="text" name="city" placeholder="Enter city name">
+                <button type="submit">Update</button>
+            </form>
+
+            {% if weather %}
+            <div class="weather-card">
+                <div class="weather-item"><strong>Temperature:</strong> {{ weather.temperature }} °C</div>
+                <div class="weather-item"><strong>Humidity:</strong> {{ weather.humidity }} %</div>
+                <div class="weather-item"><strong>Rain:</strong> {{ weather.rain }} mm</div>
+                <div class="weather-item"><strong>Wind direction:</strong> {{ weather.wind_direction_str }}</div>
+                <div class="weather-item"><strong>Wind direction (°):</strong> {{ weather.wind_direction_deg }}</div>
+                <div class="weather-item"><strong>Wind speed:</strong> {{ weather.wind_speed }} km/h</div>
+                <div class="weather-item"><strong>Wind gust:</strong> {{ weather.wind_gust }} km/h</div>
+                <div class="weather-item"><strong>Time:</strong> {{ weather.time }}</div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="container">
+            
+            <form method="post" class="weather-form">
+                <input type="text" name="city" placeholder="Enter your stock distance">
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
