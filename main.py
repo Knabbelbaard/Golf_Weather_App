@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
 import openmeteo_requests
 import pandas as pd
 import requests_cache
@@ -6,6 +10,9 @@ from retry_requests import retry
 import datetime
 import math
 
+
+OPEN_METEO_BASE_URL = os.getenv("OPEN_METEO_BASE_URL", "https://api.open-meteo.com/v1/forecast")
+OPENSTREETMAP_BASE_URL = os.getenv("OPENSTREETMAP_BASE_URL", "https://nominatim.openstreetmap.org/search")
 
 DIR_TO_DEG = {
     "N": 0, "NE": 45, "E": 90, "SE": 135,
@@ -21,7 +28,7 @@ def _deg_to_compass_8(deg: float) -> str:
         return "Unknown"
 
 def get_cords(city, country='Netherlands'):
-    url = f'https://nominatim.openstreetmap.org/search'
+    url = OPENSTREETMAP_BASE_URL
     params = {
         'q': f'{city}, {country}',
         'format': 'json',
@@ -48,7 +55,7 @@ def get_weather(latitude, longitude):
     retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
     openmeteo = openmeteo_requests.Client(session = retry_session) # type: ignore
 
-    url = "https://api.open-meteo.com/v1/forecast"
+    url = OPEN_METEO_BASE_URL
     params = {
         "latitude": latitude,
         "longitude": longitude,
