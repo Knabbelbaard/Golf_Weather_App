@@ -4,6 +4,21 @@ import requests_cache
 import requests
 from retry_requests import retry
 import datetime
+import math
+
+
+DIR_TO_DEG = {
+    "N": 0, "NE": 45, "E": 90, "SE": 135,
+    "S": 180, "SW": 225, "W": 270, "NW": 315
+}
+
+def _deg_to_compass_8(deg: float) -> str:
+    dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    try:
+        idx = int((deg + 22.5) // 45) % 8 # type: ignore
+        return dirs[idx]
+    except Exception:
+        return "Unknown"
 
 def get_cords(city, country='Netherlands'):
     url = f'https://nominatim.openstreetmap.org/search'
@@ -13,9 +28,12 @@ def get_cords(city, country='Netherlands'):
         'limit': 1
     }
     headers = {'User-Agent': 'YourAppName/1.0 (your.email@example.com)'}
-    
-    response = requests.get(url, params=params, headers=headers)
-    data = response.json()
+
+    try:
+        response = requests.get(url, params=params, headers=headers)
+        data = response.json()
+    except requests.RequestException:
+        return None
     
     if data:
         lat = data[0]['lat']
@@ -39,36 +57,25 @@ def get_weather(latitude, longitude):
         "current": ["temperature_2m", "relative_humidity_2m", "rain", "wind_direction_10m", "wind_speed_10m", "wind_gusts_10m"],
     }
     responses = openmeteo.weather_api(url, params=params)
+    if not responses:
+        return None
     response = responses[0]
 
     current = response.Current()
     if current is None:
         return None
 
-    current_temperature_2m = current.Variables(0).Value() # type: ignore
-    current_relative_humidity_2m = current.Variables(1).Value() # type: ignore
-    current_rain = current.Variables(2).Value() # type: ignore
-    current_wind_direction_10m_deg = current.Variables(3).Value() # type: ignore
-    if 0 <= current_wind_direction_10m_deg < 45:
-        current_wind_direction_10m_str = "NE"
-    elif 45 <= current_wind_direction_10m_deg < 90:
-        current_wind_direction_10m_str = "E"
-    elif 90 <= current_wind_direction_10m_deg < 135:
-        current_wind_direction_10m_str = "SE"
-    elif 135 <= current_wind_direction_10m_deg < 180:
-        current_wind_direction_10m_str = "S"
-    elif 180 <= current_wind_direction_10m_deg < 225:
-        current_wind_direction_10m_str = "SW"
-    elif 225 <= current_wind_direction_10m_deg < 270:
-        current_wind_direction_10m_str = "W"
-    elif 270 <= current_wind_direction_10m_deg < 315:
-        current_wind_direction_10m_str = "NW"
-    elif 315 <= current_wind_direction_10m_deg < 360:
-        current_wind_direction_10m_str = "N"
-    else:
-        current_wind_direction_10m_str = "Unknown"
-    current_wind_speed_10m = current.Variables(4).Value() # type: ignore
-    current_wind_gusts_10m = current.Variables(5).Value() # type: ignore
+    try:
+        current_temperature_2m = current.Variables(0).Value() # type: ignore
+        current_relative_humidity_2m = current.Variables(1).Value() # type: ignore
+        current_rain = current.Variables(2).Value() # type: ignore
+        current_wind_direction_10m_deg = current.Variables(3).Value() # type: ignore
+        current_wind_speed_10m = current.Variables(4).Value() # type: ignore
+        current_wind_gusts_10m = current.Variables(5).Value() # type: ignore
+    except Exception:
+        return None
+    
+    current_wind_direction_10m_str = _deg_to_compass_8(current_wind_direction_10m_deg)
 
     timestamp = current.Time() # type: ignore
     local_time = datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).astimezone(datetime.timezone(datetime.timedelta(hours=2)))
@@ -84,5 +91,39 @@ def get_weather(latitude, longitude):
         "time": local_time.strftime("%Y-%m-%d %H:%M:%S"),
     }
 
-def adjusted_distance():
-    pass
+
+def adjusted_distance(stock_distance: float, hitting_direction: str,weather: dict) -> dict:
+    if not weather or "wind_direction_deg" not in weather or "wind_speed" not in weather:
+        return {}
+
+    shot_degree = DIR_TO_DEG.get(hitting_direction.upper())
+    if shot_degree is None:
+        return {}
+    
+    wind_from_degree = weather["wind_direction_deg"]
+    wind_speed_kmh = weather["wind_speed"]
+    wind_to_degree = (wind_from_degree + 180.0) % 360
+
+    def ang_diff(a: float, b: float) -> float:
+        return abs((a - b + 100) % 360 - 100)
+    
+    diff = ang_diff(wind_to_degree, shot_degree)
+
+    long_comp_kmh = wind_speed_kmh * math.cos(math.radians(diff))
+    cross_comp_kmh = abs(wind_speed_kmh * math.sin(math.radians(diff)))
+
+    factor_per_kmh = 0.003
+    raw_adjust_pct = long_comp_kmh * factor_per_kmh
+    adjust_pct = max(-0.15, min(0.15, raw_adjust_pct))
+
+    adjusted = round(stock_distance * (1 + adjust_pct), 1)
+
+    return {
+        "adjusted_distance": adjusted,
+        "adjust_percent": round(adjust_pct * 100, 1),
+        "wind_component_kmh": round(long_comp_kmh, 1),
+        "crosswind_kmh": round(cross_comp_kmh, 1),
+        "angle_diff_deg": round(diff, 0),
+    }
+
+

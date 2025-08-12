@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Golf Weer App</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1 class="center-title">🌤 Golf Weer App</h1>
     <div class="flex-row">
         <div class="container">
-                        
             <form method="post" class="weather-form">
-                <input type="text" name="city" placeholder="Enter city name">
-                <button type="submit">Update</button>
+                <input type="text" name="city" value="{{ city }}" placeholder="Enter city name" />
+                <button type="submit">Update Weather</button>
             </form>
 
             {% if weather %}
@@ -28,12 +28,29 @@
             </div>
             {% endif %}
         </div>
+
         <div class="container">
-            
-            <form method="post" class="weather-form">
-                <input type="text" name="city" placeholder="Enter your stock distance">
-                <button type="submit">Update</button>
+            <form method="post" class="user-values-form">
+                <input type="hidden" name="city" value="{{ city }}">
+                <input type="text" name="stock-distance" value="{{ stock_distance if stock_distance is not none }}" placeholder="Enter your stock distance" />
+                <select name="hitting-direction">
+                    <option value="" {% if not hitting_direction %}selected{% endif %} hidden>Hitting direction</option>
+                    {% for d in ["N","NE","E","SE","S","SW","W","NW"] %}
+                    <option value="{{ d }}" {% if hitting_direction == d %}selected{% endif %}>{{ d }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Calculate</button>
             </form>
+
+            {% if adjusted %}
+            <div class="weather-card">
+                <div class="weather-item"><strong>Adjusted distance:</strong> {{ adjusted.adjusted_distance }}</div>
+                <div class="weather-item"><strong>Adjustment:</strong> {{ adjusted.adjust_percent }} %</div>
+                <div class="weather-item"><strong>Wind along shot:</strong> {{ adjusted.wind_component_kmh }} km/h</div>
+                <div class="weather-item"><strong>Crosswind:</strong> {{ adjusted.crosswind_kmh }} km/h</div>
+                <div class="weather-item"><strong>Angle difference (wind to vs shot):</strong> {{ adjusted.angle_diff_deg }}°</div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </body>

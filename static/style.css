@@ -44,6 +44,15 @@ h1 {
     font-size: 1em;
 }
 
+.weather-form select {
+    flex: 1;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1em;
+}
+
 .weather-form button {
     background: #2c3e50;
     color: white;
@@ -80,4 +89,43 @@ h1 {
     margin-top: 40px;
     margin-bottom: 40px;
     width: 100%;
+}
+
+.user-values-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.user-values-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1em;
+}
+
+.user-values-form select {
+    flex: 1;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1em;
+}
+
+.user-values-form button {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 1.0s;
+}
+
+.user-values-form button:hover {
+    background: #1a252f;
 }
