@@ -12,40 +12,40 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
-def home():
-    print("Route hit! Method:", request.method)
-    if request.method == 'POST':
-        print("Form data:", request.form)
-        print("JSON data:", request.get_json(silent=True))
-        return {"status": "received POST"}
-    return "Hello from GET"
 def index():
+    print("Route hit! Method:", request.method)
+
     weather = None
     city = "Enter city name"
-
     stock_distance: Optional[float] = None
     hitting_direction: Optional[str] = None
     adjusted: Optional[Dict[str, Any]] = None
+
     if request.method == 'POST':
-        posted_city = request.form.get('city')
-        if posted_city:
-            city = posted_city
-        if city and city != "Enter city name":
-            coords = get_cords(city)
-            if coords:
-                lat, lon = coords
-                weather = get_weather(lat, lon)
-    stock_distance_raw: Optional[str] = request.form.get('stock-distance')
-    hitting_direction = request.form.get('hitting-direction')
+        print("Form data:", request.form)
+        print("JSON data:", request.get_json(silent=True))
+        # Your existing POST handling code here
+        # return render_template(...) or whatever you normally do
+        if request.method == 'POST':
+            posted_city = request.form.get('city')
+            if posted_city:
+                city = posted_city
+            if city and city != "Enter city name":
+                coords = get_cords(city)
+                if coords:
+                    lat, lon = coords
+                    weather = get_weather(lat, lon)
+        stock_distance_raw: Optional[str] = request.form.get('stock-distance')
+        hitting_direction = request.form.get('hitting-direction')
 
-    if stock_distance_raw is not None and stock_distance_raw.strip() != "":
-        try:
-            stock_distance = float(stock_distance_raw)
-        except ValueError:
-            stock_distance = None
+        if stock_distance_raw is not None and stock_distance_raw.strip() != "":
+            try:
+                stock_distance = float(stock_distance_raw)
+            except ValueError:
+                stock_distance = None
 
-    if weather and stock_distance is not None and hitting_direction:
-        adjusted = adjusted_distance(stock_distance, hitting_direction, weather)
+        if weather and stock_distance is not None and hitting_direction:
+            adjusted = adjusted_distance(stock_distance, hitting_direction, weather)
 
     return render_template(
         'index.html',
