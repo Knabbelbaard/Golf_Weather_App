@@ -8,11 +8,38 @@
 </head>
 <body>
     <h1 class="center-title">🌤 Golf Weer App</h1>
+
     <div class="flex-row">
         <div class="container">
-            <form method="post" class="weather-form">
-                <input type="text" name="city" value="{{ city }}" placeholder="Enter city name" />
-                <button type="submit">Update Weather</button>
+            <!-- Single unified form -->
+            <form method="post" class="main-form">
+                <!-- City input -->
+                <input
+                    type="text"
+                    name="city"
+                    value="{{ city or '' }}"
+                    placeholder="Enter city name"
+                />
+
+                <!-- Stock distance input -->
+                <input
+                    type="text"
+                    name="stock-distance"
+                    value="{{ stock_distance or '' }}"
+                    placeholder="Enter your stock distance"
+                />
+
+                <!-- Hitting direction dropdown -->
+                <select name="hitting-direction">
+                    <option value="" {% if not hitting_direction %}selected{% endif %} hidden>Hitting direction</option>
+                    {% for d in ["N","NE","E","SE","S","SW","W","NW"] %}
+                    <option value="{{ d }}" {% if hitting_direction == d %}selected{% endif %}>{{ d }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Action buttons -->
+                <button type="submit" name="action" value="update_weather">Update Weather</button>
+                <button type="submit" name="action" value="calculate">Calculate</button>
             </form>
 
             {% if weather %}
@@ -30,18 +57,6 @@
         </div>
 
         <div class="container">
-            <form method="post" class="user-values-form">
-                <input type="hidden" name="city" value="{{ city }}">
-                <input type="text" name="stock-distance" value="{{ stock_distance if stock_distance is not none }}" placeholder="Enter your stock distance" />
-                <select name="hitting-direction">
-                    <option value="" {% if not hitting_direction %}selected{% endif %} hidden>Hitting direction</option>
-                    {% for d in ["N","NE","E","SE","S","SW","W","NW"] %}
-                    <option value="{{ d }}" {% if hitting_direction == d %}selected{% endif %}>{{ d }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit">Calculate</button>
-            </form>
-
             {% if adjusted %}
             <div class="weather-card">
                 <div class="weather-item"><strong>Adjusted distance:</strong> {{ adjusted.adjusted_distance }}</div>

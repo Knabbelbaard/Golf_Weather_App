@@ -132,5 +132,3 @@ def adjusted_distance(stock_distance: float, hitting_direction: str,weather: dic
         "crosswind_kmh": round(cross_comp_kmh, 1),
         "angle_diff_deg": round(diff, 0),
     }
-
-
