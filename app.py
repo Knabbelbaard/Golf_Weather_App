@@ -5,9 +5,6 @@ from typing import Optional, Dict, Any
 from main import get_weather, get_cords, adjusted_distance
 
 
-load_dotenv()
-
-
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
