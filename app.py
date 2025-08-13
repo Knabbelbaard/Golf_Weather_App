@@ -12,6 +12,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
+def home():
+    print("Route hit! Method:", request.method)
+    if request.method == 'POST':
+        print("Form data:", request.form)
+        print("JSON data:", request.get_json(silent=True))
+        return {"status": "received POST"}
+    return "Hello from GET"
 def index():
     weather = None
     city = "Enter city name"
