@@ -1,3 +1,4 @@
+import logging
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -34,19 +35,35 @@ def get_cords(city, country='Netherlands'):
         'format': 'json',
         'limit': 1
     }
-    headers = {'User-Agent': 'YourAppName/1.0 (your.email@example.com)'}
+    headers = {
+        'User-Agent': 'GolfWeerApp/1.0 (joukedj@gmail.com)'  # Change this to your real email
+    }
 
     try:
+        logging.info(f"Requesting coordinates for {city}, {country}")
         response = requests.get(url, params=params, headers=headers)
+        logging.info(f"Response status: {response.status_code}")
+        logging.info(f"Response text: {response.text}")
+        
+        if response.status_code != 200:
+            logging.error(f"Error getting coordinates: {response.status_code}")
+            return None
+            
         data = response.json()
-    except requests.RequestException:
-        return None
-    
-    if data:
+        if not data:
+            logging.error("No data returned from geocoding service")
+            return None
+            
         lat = data[0]['lat']
         lon = data[0]['lon']
+        logging.info(f"Found coordinates: {lat}, {lon}")
         return float(lat), float(lon)
-    else:
+        
+    except requests.RequestException as e:
+        logging.error(f"Request failed: {str(e)}")
+        return None
+    except (KeyError, IndexError) as e:
+        logging.error(f"Error parsing response: {str(e)}")
         return None
 
 

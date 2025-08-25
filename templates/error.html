@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Error - Golf Weer App</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1 class="center-title">⚠️ Error</h1>
+    <div class="container">
+        <div class="weather-card">
+            <div class="weather-item">{{ error }}</div>
+            <button onclick="window.location.href='/'">Back to home</button>
+        </div>
+    </div>
+</body>
+</html>
