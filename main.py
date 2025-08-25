@@ -36,7 +36,7 @@ def get_cords(city, country='Netherlands'):
         'limit': 1
     }
     headers = {
-        'User-Agent': 'GolfWeerApp/1.0 (joukedj@gmail.com)'  # Change this to your real email
+        'User-Agent': os.getenv('USER_AGENT', 'GolfWeerApp/1.0')
     }
 
     try:
