@@ -129,3 +129,58 @@ h1 {
 .user-values-form button:hover {
     background: #1a252f;
 }
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 20px;
+    }
+
+    .flex-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .main-form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .weather-form button,
+    .user-values-form button {
+        width: 100%;
+    }
+
+    .weather-form input[type="text"],
+    .weather-form select,
+    .user-values-form input[type="text"],
+    .user-values-form select {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .weather-card {
+        margin: 10px 0;
+    }
+}
+
+/* For very small screens */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.2em;
+    }
+
+    .weather-item {
+        font-size: 0.9em;
+    }
+}
