@@ -134,7 +134,6 @@ def adjusted_distance(stock_distance: float, hitting_direction: str,weather: dic
     diff = ang_diff(wind_to_degree, shot_degree)
 
     long_comp_kmh = wind_speed_kmh * math.cos(math.radians(diff))
-    cross_comp_kmh = abs(wind_speed_kmh * math.sin(math.radians(diff)))
 
     factor_per_kmh = 0.003
     raw_adjust_pct = long_comp_kmh * factor_per_kmh
@@ -146,6 +145,5 @@ def adjusted_distance(stock_distance: float, hitting_direction: str,weather: dic
         "adjusted_distance": adjusted,
         "adjust_percent": round(adjust_pct * 100, 1),
         "wind_component_kmh": round(long_comp_kmh, 1),
-        "crosswind_kmh": round(cross_comp_kmh, 1),
         "angle_diff_deg": round(diff, 0),
     }
