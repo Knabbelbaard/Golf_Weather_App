@@ -11,9 +11,7 @@
 
     <div class="flex-row">
         <div class="container">
-            <!-- Single unified form -->
             <form method="post" class="main-form">
-                <!-- City input -->
                 <input
                     type="text"
                     name="city"
@@ -21,7 +19,6 @@
                     placeholder="Enter city name"
                 />
 
-                <!-- Stock distance input -->
                 <input
                     type="text"
                     name="stock-distance"
@@ -29,7 +26,6 @@
                     placeholder="Enter your stock distance"
                 />
 
-                <!-- Hitting direction dropdown -->
                 <select name="hitting-direction">
                     <option value="" {% if not hitting_direction %}selected{% endif %} hidden>Hitting direction</option>
                     {% for d in ["N","NE","E","SE","S","SW","W","NW"] %}
@@ -37,7 +33,6 @@
                     {% endfor %}
                 </select>
 
-                <!-- Action buttons -->
                 <button type="submit" name="action" value="update_weather">Update Weather</button>
                 <button type="submit" name="action" value="calculate">Calculate</button>
             </form>

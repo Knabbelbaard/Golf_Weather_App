@@ -31,14 +31,14 @@ def index():
             stock_distance_raw = (request.form.get("stock-distance") or "").strip()
             hitting_direction = request.form.get("hitting-direction") or None
 
-            # Convert stock distance safely
+
             try:
                 stock_distance = float(stock_distance_raw) if stock_distance_raw else None
             except ValueError:
                 flash("Stock distance must be a number.")
                 stock_distance = None
 
-            # Get coordinates and weather if city is provided
+
             coords = get_cords(city) if city else None
             if coords:
                 latitude, longitude = coords
@@ -48,6 +48,7 @@ def index():
             else:
                 logging.error(f"Could not get coordinates for city {city}")
                 flash("Could not find coordinates for the city.")
+                
 
             if action == "calculate" and weather and stock_distance and hitting_direction:
                 adjusted = adjusted_distance(stock_distance, hitting_direction, weather)
