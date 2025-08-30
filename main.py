@@ -116,7 +116,25 @@ def get_weather(latitude, longitude):
     }
 
 
-def adjusted_distance(stock_distance: float, hitting_direction: str,weather: dict) -> dict:
+
+def adjusted_for_temp(stock_distance: float, weather: dict) -> dict:
+    if not weather or "temperature" not in weather:
+        return {}
+
+    temperature = weather["temperature"]
+
+    temperature_difference = temperature - 20
+
+    percentage_increase = 0.005 * temperature_difference 
+
+    adjusted_temp = (stock_distance * percentage_increase) + stock_distance
+
+    return{
+        "adjusted_for_temp": adjusted_temp,
+    }
+
+
+def adjusted_distance(adjusted_for_temp: float, hitting_direction: str,weather: dict) -> dict:
     if not weather or "wind_direction_deg" not in weather or "wind_speed" not in weather:
         return {}
 
@@ -139,7 +157,7 @@ def adjusted_distance(stock_distance: float, hitting_direction: str,weather: dic
     raw_adjust_pct = long_comp_kmh * factor_per_kmh
     adjust_pct = max(-0.15, min(0.15, raw_adjust_pct))
 
-    adjusted = round(stock_distance * (1 + adjust_pct), 1)
+    adjusted = round(adjusted_for_temp * (1 + adjust_pct), 1)
 
     return {
         "adjusted_distance": adjusted,

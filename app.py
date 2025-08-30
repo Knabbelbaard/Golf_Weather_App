@@ -3,7 +3,7 @@ import os
 import logging
 from dotenv import load_dotenv
 from typing import Optional, Dict, Any
-from main import get_weather, get_cords, adjusted_distance
+from main import get_weather, get_cords, adjusted_distance, adjusted_for_temp
 from typing import Optional, Dict
 
 
@@ -51,7 +51,9 @@ def index():
                 
 
             if action == "calculate" and weather and stock_distance and hitting_direction:
-                adjusted = adjusted_distance(stock_distance, hitting_direction, weather)
+                temp_adjusted = adjusted_for_temp(stock_distance, weather)
+                if temp_adjusted:
+                    adjusted = adjusted_distance(temp_adjusted["adjusted_for_temp"], hitting_direction, weather)
 
         return render_template(
             "index.html",
@@ -59,6 +61,7 @@ def index():
             stock_distance=stock_distance,
             hitting_direction=hitting_direction,
             weather=weather,
+            temp_adjusted=temp_adjusted if 'temp_adjusted' in locals() else None,
             adjusted=adjusted,
         )
 
