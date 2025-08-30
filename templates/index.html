@@ -63,5 +63,13 @@
             {% endif %}
         </div>
     </div>
+
+    <div class="compass-container">
+        <div id="compass" class="compass">
+            <div id="needle" class="needle"></div>
+        </div>
+        <p id="direction">Direction: </p>
+    </div>
+    <script src="{{ url_for('static', filename='compass.js') }}"></script>
 </body>
 </html>

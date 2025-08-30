@@ -130,6 +130,32 @@ h1 {
     background: #1a252f;
 }
 
+.compass-container {
+    text-align: center;
+}
+
+.compass {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border: 10px solid black;
+    border-radius: 50%;
+    margin: 20px auto;
+    background-color: #e0e0e0;
+}
+
+.needle {
+    position: absolute;
+    width: 5px;
+    height: 80px;
+    background-color: red;
+    top: 50%;
+    left: 50%;
+    transform-origin: 50% 100%;
+    transform: translate(-50%, -100%) rotate(0deg);
+    transition: transform 0.1s ease-out;
+}
+
 @media screen and (max-width: 768px) {
     body {
         padding: 20px;
