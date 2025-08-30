@@ -31,7 +31,7 @@ if (testMode) {
                 try {
                     const permission = await DeviceOrientationEvent.requestPermission();
                     if (permission === 'granted') {
-                        window.addEventListener("deviceorientation", function(event) {
+                        window.addEventListener("deviceorientationabsolute", function(event) {
                             if (event.alpha !== null) {
                                 updateCompass(event.alpha);
                             }
@@ -44,8 +44,7 @@ if (testMode) {
                 document.removeEventListener('click', requestPermission);
             }, { once: true });
         } else {
-            // Non-iOS devices
-            window.addEventListener("deviceorientation", function(event) {
+            window.addEventListener("deviceorientationabsolute", function(event) {
                 if (event.alpha !== null) {
                     updateCompass(event.alpha);
                 }
