@@ -55,7 +55,7 @@
         <div class="container">
             {% if adjusted %}
             <div class="weather-card">
-                <div class="weather-item"><strong>Adjusted distance:</strong> {{ adjusted.adjusted_distance_total }}</div>
+                <div class="weather-item"><strong>Adjusted distance:</strong> {{ adjusted.adjusted_distance }}</div>
                 <div class="weather-item"><strong>Adjustment:</strong> {{ adjusted.adjust_percent }} %</div>
                 <div class="weather-item"><strong>Wind along shot:</strong> {{ adjusted.wind_component_kmh }} km/h</div>
                 <div class="weather-item"><strong>Angle difference (wind to vs shot):</strong> {{ adjusted.angle_diff_deg }}°</div>
