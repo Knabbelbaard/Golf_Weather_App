@@ -36,6 +36,11 @@ if (testMode) {
                                 updateCompass(event.alpha);
                             }
                         });
+                        window.addEventListener("deviceorientation", function(event) {
+                            if (event.alpha !== null) {
+                                updateCompass(event.alpha);
+                            }
+                        });
                     }
                 } catch (error) {
                     console.error("Error requesting permission:", error);
@@ -45,6 +50,11 @@ if (testMode) {
             }, { once: true });
         } else {
             window.addEventListener("deviceorientationabsolute", function(event) {
+                if (event.alpha !== null) {
+                    updateCompass(event.alpha);
+                }
+            });
+            window.addEventListener("deviceorientation", function(event) {
                 if (event.alpha !== null) {
                     updateCompass(event.alpha);
                 }
